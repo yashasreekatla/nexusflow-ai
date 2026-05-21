@@ -9,7 +9,8 @@ import random
 st.set_page_config(
     page_title="NexusFlow AI",
     page_icon="🧠",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # =========================================================
@@ -34,10 +35,6 @@ header {
     display: none;
 }
 
-[data-testid="stDecoration"] {
-    display: none;
-}
-
 .block-container {
     padding-top: 1rem;
 }
@@ -51,33 +48,40 @@ header {
     );
 }
 
+/* SIDEBAR */
+
 section[data-testid="stSidebar"] {
     background: linear-gradient(
         180deg,
         #dde7f3 0%,
         #edf2f7 100%
     );
+    border-right: 1px solid #cbd5e1;
 }
 
+/* TITLES */
+
 .main-title {
-    font-size: 54px;
+    font-size: 60px;
     font-weight: 800;
     color: #0f172a;
     margin-bottom: 0;
 }
 
 .sub-title {
-    font-size: 18px;
+    font-size: 20px;
     color: #64748b;
-    margin-top: -8px;
+    margin-top: -10px;
 }
 
+/* CARDS */
+
 .card {
-    background: rgba(255,255,255,0.78);
+    background: rgba(255,255,255,0.82);
     border-radius: 24px;
-    padding: 24px;
+    padding: 26px;
     margin-bottom: 22px;
-    border: 1px solid rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.5);
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     backdrop-filter: blur(10px);
 }
@@ -101,10 +105,16 @@ section[data-testid="stSidebar"] {
     font-size: 15px;
 }
 
+/* CHAT */
+
 .chat-user {
-    background: #2563eb;
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
     color: white;
-    padding: 16px;
+    padding: 18px;
     border-radius: 18px;
     margin-top: 12px;
 }
@@ -116,6 +126,8 @@ section[data-testid="stSidebar"] {
     margin-top: 12px;
     border: 1px solid #dbeafe;
 }
+
+/* ALERT BOXES */
 
 .success-box {
     background: #ecfdf5;
@@ -138,6 +150,8 @@ section[data-testid="stSidebar"] {
     border-radius: 18px;
 }
 
+/* BUTTON */
+
 .stButton > button {
     width: 100%;
     border-radius: 14px;
@@ -152,8 +166,20 @@ section[data-testid="stSidebar"] {
     font-weight: 700;
 }
 
+/* INPUTS */
+
 textarea, input {
     border-radius: 14px !important;
+}
+
+.skill-pill {
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 8px 14px;
+    border-radius: 18px;
+    margin: 4px;
+    display: inline-block;
+    font-weight: 600;
 }
 
 </style>
@@ -251,6 +277,10 @@ with col2:
 
     ask_ai = st.button("Ask AI")
 
+# =========================================================
+# AI RESPONSE ENGINE
+# =========================================================
+
 if ask_ai and user_query:
 
     st.session_state.chat_history.append(
@@ -262,136 +292,131 @@ if ask_ai and user_query:
     if "sales" in user_lower or "crm" in user_lower:
 
         ai_reply = """
-NexusFlow AI Sales & CRM Recommendations
+Sales & CRM Optimization Strategy
 
-1. Implement AI Lead Scoring
-Use machine learning models to identify high-conversion prospects based on customer behavior, engagement history and demographic patterns.
+1. AI Lead Scoring
+Identify high-conversion leads automatically using predictive analytics.
 
-2. Automate Customer Follow-Ups
-Businesses lose many leads due to delayed responses. Automated email sequences and AI-driven reminders improve engagement rates significantly.
+2. CRM Workflow Automation
+Automate follow-ups, reminders and engagement tracking.
 
-3. Centralize CRM Data
-Integrating all customer interactions into one CRM dashboard helps sales teams track communication history, pending deals and customer preferences efficiently.
+3. Sales Funnel Analytics
+Monitor conversion performance at each pipeline stage.
 
-4. Predict Customer Behavior
-AI analytics can identify customers likely to purchase, churn or upgrade services. This allows proactive sales strategies.
+4. Customer Retention Intelligence
+Detect customers likely to churn and trigger proactive engagement.
 
-5. Improve Sales Funnel Visibility
-Tracking conversion rates at every stage helps identify weak points in the pipeline and optimize performance.
+5. Personalized Outreach
+AI-generated communication improves response rates.
 
-Expected Impact:
-• Increased lead conversion
-• Faster response times
+Business Impact:
+• Increased revenue
+• Faster conversions
 • Better customer retention
-• Improved sales forecasting
 """
 
     elif "finance" in user_lower:
 
         ai_reply = """
-NexusFlow AI Financial Optimization Report
+Financial Automation Insights
 
-1. Expense Pattern Monitoring
-AI systems can continuously analyze spending trends and identify abnormal financial behavior before it becomes risky.
+1. Expense Monitoring
+Track unusual spending patterns automatically.
 
 2. Predictive Budget Forecasting
-Machine learning models can estimate future operational costs based on historical financial data.
+Estimate future operational costs using AI.
 
 3. Invoice Automation
-Automating invoice processing reduces manual workload, improves accuracy and speeds up approvals.
+Reduce manual finance processing workload.
 
 4. Fraud Detection
-AI can identify suspicious transactions, duplicate payments and unusual spending behavior in real-time.
+Identify suspicious transactions instantly.
 
-5. Cost Optimization
-The platform recommends reducing inactive cloud resources, unused subscriptions and inefficient spending patterns.
+5. Financial KPI Analytics
+Track ROI, revenue growth and operational efficiency.
 
-Business Benefits:
-• Reduced operational costs
-• Better financial transparency
+Expected Benefits:
+• Reduced costs
+• Improved transparency
 • Faster reporting
-• Improved budgeting accuracy
 """
 
     elif "operations" in user_lower:
 
         ai_reply = """
-NexusFlow AI Operations Intelligence
+Operations Intelligence Report
 
-1. Workflow Bottleneck Detection
-AI continuously monitors project activities and identifies delays affecting delivery timelines.
+1. Workflow Monitoring
+AI identifies bottlenecks affecting delivery timelines.
 
-2. Resource Allocation Optimization
-The platform recommends reallocating employees and infrastructure to improve productivity.
+2. Resource Optimization
+Improve allocation of employees and infrastructure.
 
-3. Predictive Maintenance
-Operational AI can identify systems likely to fail before breakdowns occur.
+3. Productivity Analytics
+Track operational performance in real-time.
 
-4. Productivity Analytics
-Managers can track task completion efficiency and identify underperforming workflows.
+4. Predictive Alerts
+Prevent operational failures before they occur.
 
-5. Real-Time Operational Alerts
-The system proactively generates alerts for risks, delays and dependency conflicts.
+5. AI Automation Recommendations
+Optimize repetitive enterprise tasks.
 
 Operational Impact:
-• Faster project delivery
+• Higher efficiency
 • Reduced downtime
-• Better resource utilization
-• Improved team productivity
+• Better scalability
 """
 
     elif "hr" in user_lower or "hiring" in user_lower:
 
         ai_reply = """
-NexusFlow AI HR Automation Insights
+HR Automation Insights
 
-1. AI Resume Screening
-The system automatically matches resumes against job descriptions and ranks candidates based on skill relevance.
+1. Resume Screening
+AI ranks candidates using skill relevance analysis.
 
-2. Candidate Skill Analysis
-Technical skills, certifications and experience levels are analyzed automatically.
+2. Candidate Intelligence
+Analyze certifications, projects and technical expertise.
 
 3. Hiring Pipeline Optimization
-AI helps HR teams identify bottlenecks in recruitment workflows.
+Detect delays in recruitment workflows.
 
-4. Employee Performance Tracking
-The platform can monitor productivity metrics and engagement trends.
+4. Workforce Analytics
+Track employee engagement and productivity.
 
-5. Predictive Hiring Analytics
-AI predicts candidate success probability using historical recruitment data.
+5. Interview Recommendation Engine
+AI suggests top candidates for interviews.
 
 Benefits:
-• Faster hiring cycles
+• Faster hiring
 • Better talent acquisition
-• Reduced recruiter workload
-• Improved hiring accuracy
+• Reduced HR workload
 """
 
     else:
 
         ai_reply = f"""
-NexusFlow AI Business Analysis
+Enterprise AI Business Analysis
 
-Your Query:
+Query:
 "{user_query}"
 
-Strategic Recommendations:
+Recommendations:
 
-1. Implement workflow automation to reduce repetitive manual tasks.
+1. Automate repetitive workflows.
 
-2. Use analytics dashboards for data-driven decision making.
+2. Centralize operational data into intelligent dashboards.
 
-3. Centralize business operations into integrated management systems.
+3. Use predictive analytics for business decisions.
 
-4. Deploy AI-driven monitoring tools for predictive insights.
+4. Improve customer engagement through AI automation.
 
-5. Improve organizational efficiency through automation and process optimization.
+5. Optimize enterprise productivity with workflow intelligence.
 
-Enterprise Impact:
-• Higher productivity
+Expected Impact:
+• Higher efficiency
+• Better scalability
 • Reduced operational costs
-• Improved scalability
-• Faster business decisions
 """
 
     st.session_state.chat_history.append(
@@ -418,7 +443,7 @@ for role_name, message in st.session_state.chat_history:
         st.markdown(f"""
         <div class='chat-ai'>
         <b style='color:#2563eb;'>
-        NexusFlow AI
+        NexusFlow AI Assistant
         </b>
         <br><br>
         {message}
@@ -515,9 +540,6 @@ Hiring Senior Backend Developer
 
 Required Skills:
 Python, FastAPI, Docker, Kubernetes, AWS and PostgreSQL.
-
-Experience:
-Minimum 4 years building scalable cloud-native enterprise applications.
 """
     )
 
@@ -529,30 +551,10 @@ Senior Backend Developer
 
 Skills:
 Python, FastAPI, Docker, Kubernetes, AWS, PostgreSQL
-
-Experience:
-5 years building scalable enterprise APIs and cloud infrastructure.
-
-Projects:
-• AI-powered HR analytics platform
-• Cloud-native CRM backend system
-• Real-time operations dashboard
-
-Certifications:
-AWS Certified Developer
-Docker Professional Certification
 """
     )
 
     if st.button("Analyze Candidate"):
-
-        matched = [
-            "Python",
-            "FastAPI",
-            "Docker",
-            "AWS",
-            "PostgreSQL"
-        ]
 
         score = 92
 
@@ -569,27 +571,25 @@ Docker Professional Certification
 
         Strong technical alignment detected.
 
-        Recommended for technical interview round.
-
         </div>
         """, unsafe_allow_html=True)
 
         st.markdown("### Skill Match")
 
+        skills = [
+            "Python",
+            "FastAPI",
+            "Docker",
+            "AWS",
+            "PostgreSQL"
+        ]
+
         pills = ""
 
-        for skill in matched:
+        for skill in skills:
 
             pills += f"""
-            <span style='
-            background:#dbeafe;
-            color:#1d4ed8;
-            padding:8px 14px;
-            border-radius:18px;
-            margin:4px;
-            display:inline-block;
-            font-weight:600;
-            '>
+            <span class='skill-pill'>
             ✓ {skill}
             </span>
             """
@@ -597,43 +597,36 @@ Docker Professional Certification
         st.markdown(pills, unsafe_allow_html=True)
 
 # =========================================================
-# FINANCE AUTOMATION
+# FINANCE
 # =========================================================
 
 elif page == "Finance Automation":
 
-    st.subheader("AI Financial Risk Analyzer")
+    st.subheader("AI Financial Analyzer")
 
     finance_text = st.text_area(
-        "Financial Summary",
+        "Financial Report",
         height=220,
         value="""
-Quarterly Financial Summary
-
-• Cloud infrastructure expenses increased by 38%
-• Marketing spend increased by 22%
-• Operational efficiency improved by 17%
-• AI automation reduced manual processing costs
-• Predicted Q4 revenue growth: 14%
+• Cloud infrastructure expenses increased
+• Operational costs optimized
+• Predicted revenue growth: 14%
 """
     )
 
-    if st.button("Analyze Financial Risk"):
+    if st.button("Analyze Finance"):
 
-        risk = 84
-
-        st.markdown(f"""
+        st.markdown("""
         <div class='warning-box'>
 
         <h2>
-        Financial Risk Detected
+        Financial Optimization Required
         </h2>
 
-        <h1>
-        {risk}%
-        </h1>
+        AI detected increasing cloud operational expenses.
 
-        AI recommends reducing inactive cloud resources and optimizing operational spending.
+        Recommended:
+        Optimize inactive resources and automate reporting.
 
         </div>
         """, unsafe_allow_html=True)
@@ -656,24 +649,20 @@ Quarterly Financial Summary
         )
 
 # =========================================================
-# OPERATIONS AUTOMATION
+# OPERATIONS
 # =========================================================
 
 elif page == "Operations Automation":
 
-    st.subheader("AI Operations Monitoring")
+    st.subheader("Operations Intelligence")
 
-    ops_text = st.text_area(
+    ops = st.text_area(
         "Operations Report",
-        height=240,
+        height=220,
         value="""
-Operations Status Report
-
-• Backend API deployment delayed by 5 days
-• QA testing resources overloaded
-• DevOps infrastructure utilization at 87%
-• Two critical workflow bottlenecks detected
-• Customer ticket resolution time increased by 18%
+• Backend deployment delayed
+• QA resources overloaded
+• Infrastructure utilization at 87%
 """
     )
 
@@ -683,68 +672,50 @@ Operations Status Report
         <div class='info-box'>
 
         <h2>
-        Operational Risk Alert
+        Operational Alert
         </h2>
 
-        AI detected workflow bottlenecks affecting delivery timelines.
+        Workflow bottlenecks detected.
 
-        Recommended Action:
-        Increase QA testing resources and optimize deployment pipeline.
+        Recommended:
+        Increase QA resources and optimize deployments.
 
         </div>
         """, unsafe_allow_html=True)
 
 # =========================================================
-# SALES INTELLIGENCE
+# SALES
 # =========================================================
 
 elif page == "Sales Intelligence":
 
     st.subheader("AI Lead Scoring")
 
-    lead_text = st.text_area(
+    lead = st.text_area(
         "Lead Details",
-        height=240,
+        height=220,
         value="""
-Lead Analysis Report
-
-Company:
-MediCore Healthcare Solutions
+Company: MediCore Healthcare
 
 Requirements:
 • CRM automation
-• AI-powered analytics
-• Customer support automation
-
-Estimated Deal Size:
-₹24 Lakhs
-
-Engagement Level:
-High
-
-Decision Stage:
-Final vendor evaluation
+• Analytics dashboards
+• AI support systems
 """
     )
 
     if st.button("Analyze Lead"):
 
-        lead_score = 94
-
-        st.markdown(f"""
+        st.markdown("""
         <div class='card'>
 
         <h2 style='color:#2563eb;'>
-        Lead Score
+        Lead Score: 94/100
         </h2>
-
-        <h1>
-        {lead_score}/100
-        </h1>
 
         High conversion probability detected.
 
-        Recommended Action:
+        Recommended:
         Immediate executive sales follow-up.
 
         </div>
@@ -758,43 +729,37 @@ elif page == "Analytics":
 
     st.subheader("Enterprise Analytics Dashboard")
 
-    col1, col2 = st.columns(2)
+    chart1 = pd.DataFrame({
+        "Month": [
+            "Jan","Feb","Mar",
+            "Apr","May"
+        ],
+        "Hiring": [
+            45,53,61,70,79
+        ]
+    })
 
-    with col1:
+    st.line_chart(
+        chart1,
+        x="Month",
+        y="Hiring"
+    )
 
-        hire_chart = pd.DataFrame({
-            "Month": [
-                "Jan","Feb","Mar",
-                "Apr","May"
-            ],
-            "Hiring": [
-                45,53,61,70,79
-            ]
-        })
+    chart2 = pd.DataFrame({
+        "Month": [
+            "Jan","Feb","Mar",
+            "Apr","May"
+        ],
+        "Savings": [
+            12,18,25,33,46
+        ]
+    })
 
-        st.line_chart(
-            hire_chart,
-            x="Month",
-            y="Hiring"
-        )
-
-    with col2:
-
-        finance_chart = pd.DataFrame({
-            "Month": [
-                "Jan","Feb","Mar",
-                "Apr","May"
-            ],
-            "Savings": [
-                12,18,25,33,46
-            ]
-        })
-
-        st.area_chart(
-            finance_chart,
-            x="Month",
-            y="Savings"
-        )
+    st.area_chart(
+        chart2,
+        x="Month",
+        y="Savings"
+    )
 
 # =========================================================
 # AUDIT LOGS
@@ -802,7 +767,7 @@ elif page == "Analytics":
 
 elif page == "Audit Logs":
 
-    st.subheader("Enterprise Audit Logs")
+    st.subheader("Audit Logs")
 
     logs = pd.DataFrame({
 
