@@ -27,6 +27,19 @@ if "chat_history" not in st.session_state:
 st.markdown("""
 <style>
 
+/* SHOW SIDEBAR TOGGLE BUTTON */
+
+button[kind="header"] {
+    display: block !important;
+}
+
+[data-testid="collapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+/* HIDE STREAMLIT BRANDING */
+
 header {
     visibility: hidden;
 }
@@ -38,6 +51,8 @@ header {
 .block-container {
     padding-top: 1rem;
 }
+
+/* APP BACKGROUND */
 
 .stApp {
     background: linear-gradient(
@@ -62,7 +77,7 @@ section[data-testid="stSidebar"] {
 /* TITLES */
 
 .main-title {
-    font-size: 60px;
+    font-size: 58px;
     font-weight: 800;
     color: #0f172a;
     margin-bottom: 0;
@@ -85,6 +100,8 @@ section[data-testid="stSidebar"] {
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     backdrop-filter: blur(10px);
 }
+
+/* METRIC CARDS */
 
 .metric-card {
     background: white;
@@ -150,7 +167,7 @@ section[data-testid="stSidebar"] {
     border-radius: 18px;
 }
 
-/* BUTTON */
+/* BUTTONS */
 
 .stButton > button {
     width: 100%;
@@ -171,6 +188,8 @@ section[data-testid="stSidebar"] {
 textarea, input {
     border-radius: 14px !important;
 }
+
+/* SKILL PILLS */
 
 .skill-pill {
     background: #dbeafe;
@@ -240,7 +259,7 @@ Enterprise Workflow Automation Platform
 st.markdown("<br>", unsafe_allow_html=True)
 
 # =========================================================
-# AI BUSINESS COPILOT
+# AI COPILOT
 # =========================================================
 
 st.markdown("""
@@ -250,7 +269,7 @@ st.markdown("""
 AI Business Copilot
 </h2>
 
-Ask questions related to:
+Ask anything related to:
 • HR
 • CRM
 • Finance
@@ -295,24 +314,24 @@ if ask_ai and user_query:
 Sales & CRM Optimization Strategy
 
 1. AI Lead Scoring
-Identify high-conversion leads automatically using predictive analytics.
+Use predictive analytics to identify high-conversion prospects.
 
 2. CRM Workflow Automation
-Automate follow-ups, reminders and engagement tracking.
+Automate follow-ups and customer engagement tracking.
 
-3. Sales Funnel Analytics
-Monitor conversion performance at each pipeline stage.
+3. Funnel Analytics
+Track conversion performance at each stage.
 
 4. Customer Retention Intelligence
-Detect customers likely to churn and trigger proactive engagement.
+Identify churn risks proactively.
 
 5. Personalized Outreach
-AI-generated communication improves response rates.
+Improve response rates with AI-generated messaging.
 
 Business Impact:
 • Increased revenue
-• Faster conversions
 • Better customer retention
+• Faster sales conversion
 """
 
     elif "finance" in user_lower:
@@ -321,24 +340,24 @@ Business Impact:
 Financial Automation Insights
 
 1. Expense Monitoring
-Track unusual spending patterns automatically.
+Track unusual financial patterns automatically.
 
-2. Predictive Budget Forecasting
-Estimate future operational costs using AI.
+2. Budget Forecasting
+Use AI to predict future operational expenses.
 
 3. Invoice Automation
-Reduce manual finance processing workload.
+Reduce manual finance operations workload.
 
 4. Fraud Detection
-Identify suspicious transactions instantly.
+Identify suspicious transactions in real-time.
 
-5. Financial KPI Analytics
-Track ROI, revenue growth and operational efficiency.
+5. KPI Analytics
+Track ROI and revenue growth efficiently.
 
 Expected Benefits:
 • Reduced costs
-• Improved transparency
 • Faster reporting
+• Improved transparency
 """
 
     elif "operations" in user_lower:
@@ -347,24 +366,24 @@ Expected Benefits:
 Operations Intelligence Report
 
 1. Workflow Monitoring
-AI identifies bottlenecks affecting delivery timelines.
+Identify bottlenecks affecting delivery timelines.
 
 2. Resource Optimization
-Improve allocation of employees and infrastructure.
+Improve allocation of infrastructure and employees.
 
 3. Productivity Analytics
-Track operational performance in real-time.
+Track operational efficiency continuously.
 
 4. Predictive Alerts
-Prevent operational failures before they occur.
+Prevent operational failures proactively.
 
-5. AI Automation Recommendations
+5. AI Automation
 Optimize repetitive enterprise tasks.
 
 Operational Impact:
+• Better scalability
 • Higher efficiency
 • Reduced downtime
-• Better scalability
 """
 
     elif "hr" in user_lower or "hiring" in user_lower:
@@ -373,19 +392,19 @@ Operational Impact:
 HR Automation Insights
 
 1. Resume Screening
-AI ranks candidates using skill relevance analysis.
+Rank candidates using AI-based skill analysis.
 
 2. Candidate Intelligence
-Analyze certifications, projects and technical expertise.
+Analyze certifications and project experience.
 
-3. Hiring Pipeline Optimization
-Detect delays in recruitment workflows.
+3. Recruitment Optimization
+Identify hiring pipeline delays.
 
 4. Workforce Analytics
-Track employee engagement and productivity.
+Track employee productivity and engagement.
 
-5. Interview Recommendation Engine
-AI suggests top candidates for interviews.
+5. Interview Recommendations
+Suggest top candidates for interviews.
 
 Benefits:
 • Faster hiring
@@ -396,7 +415,7 @@ Benefits:
     else:
 
         ai_reply = f"""
-Enterprise AI Business Analysis
+Enterprise AI Analysis
 
 Query:
 "{user_query}"
@@ -405,18 +424,18 @@ Recommendations:
 
 1. Automate repetitive workflows.
 
-2. Centralize operational data into intelligent dashboards.
+2. Centralize business operations into smart dashboards.
 
-3. Use predictive analytics for business decisions.
+3. Use predictive analytics for decision-making.
 
-4. Improve customer engagement through AI automation.
+4. Improve customer engagement with AI automation.
 
-5. Optimize enterprise productivity with workflow intelligence.
+5. Optimize enterprise productivity continuously.
 
-Expected Impact:
+Business Impact:
 • Higher efficiency
-• Better scalability
 • Reduced operational costs
+• Better scalability
 """
 
     st.session_state.chat_history.append(
@@ -469,7 +488,7 @@ if page == "Dashboard":
 
     Hiring efficiency improved by 72%.
 
-    Financial monitoring identified budget optimization opportunities.
+    Finance AI identified optimization opportunities.
 
     Operations AI proactively detected workflow bottlenecks.
 
@@ -623,10 +642,10 @@ elif page == "Finance Automation":
         Financial Optimization Required
         </h2>
 
-        AI detected increasing cloud operational expenses.
+        AI detected increasing operational expenses.
 
         Recommended:
-        Optimize inactive resources and automate reporting.
+        Optimize inactive cloud resources.
 
         </div>
         """, unsafe_allow_html=True)
