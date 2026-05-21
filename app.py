@@ -27,26 +27,19 @@ if "chat_history" not in st.session_state:
 st.markdown("""
 <style>
 
-/* SHOW SIDEBAR TOGGLE BUTTON */
+/* KEEP STREAMLIT HEADER FOR SIDEBAR BUTTON */
 
-button[kind="header"] {
-    display: block !important;
+[data-testid="stHeader"] {
+    background: transparent;
 }
+
+/* SHOW SIDEBAR TOGGLE */
 
 [data-testid="collapsedControl"] {
     display: flex !important;
-    visibility: visible !important;
 }
 
-/* HIDE STREAMLIT BRANDING */
-
-header {
-    visibility: hidden;
-}
-
-[data-testid="stToolbar"] {
-    display: none;
-}
+/* REMOVE TOP GAP */
 
 .block-container {
     padding-top: 1rem;
@@ -101,8 +94,6 @@ section[data-testid="stSidebar"] {
     backdrop-filter: blur(10px);
 }
 
-/* METRIC CARDS */
-
 .metric-card {
     background: white;
     border-radius: 20px;
@@ -144,7 +135,7 @@ section[data-testid="stSidebar"] {
     border: 1px solid #dbeafe;
 }
 
-/* ALERT BOXES */
+/* ALERTS */
 
 .success-box {
     background: #ecfdf5;
@@ -203,7 +194,6 @@ textarea, input {
 
 </style>
 """, unsafe_allow_html=True)
-
 # =========================================================
 # SIDEBAR
 # =========================================================
