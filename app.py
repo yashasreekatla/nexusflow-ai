@@ -505,30 +505,36 @@ with coly:
 # CHAT DISPLAY
 # =========================================================
 
+# =========================================================
+# CHAT DISPLAY
+# =========================================================
+
 for role_name, message in st.session_state.chat_history:
+
+    safe_message = message.replace("<", "&lt;").replace(">", "&gt;")
 
     if role_name == "user":
 
         st.markdown(f"""
-        <div class='chat-user'>
-        <b>You:</b><br><br>
-        {message}
-        </div>
-        """, unsafe_allow_html=True)
+<div class='chat-user'>
+<b>You:</b><br><br>
+{safe_message}
+</div>
+""", unsafe_allow_html=True)
 
     else:
 
-        st.markdown(f"""
-        <div class='chat-ai'>
-        <b style='color:#23364d;'>
-        NexusFlow AI Assistant
-        </b>
-        <br><br>
-        {message}
-        </div>
-        """, unsafe_allow_html=True)
+        formatted_message = safe_message.replace("\n", "<br>")
 
-st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(f"""
+<div class='chat-ai'>
+<b style='color:#23364d;'>
+NexusFlow AI Assistant
+</b>
+<br><br>
+{formatted_message}
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================================
 # DASHBOARD
