@@ -21,179 +21,40 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # =========================================================
-# CUSTOM CSS
+# PREMIUM CSS
 # =========================================================
 
 st.markdown("""
 <style>
 
-/* KEEP STREAMLIT HEADER FOR SIDEBAR BUTTON */
-
-[data-testid="stHeader"] {
-    background: transparent;
-}
-
-/* SHOW SIDEBAR TOGGLE */
-
-[data-testid="collapsedControl"] {
-    display: flex !important;
-}
-
-/* REMOVE TOP GAP */
-
-.block-container {
-    padding-top: 1rem;
-}
-
-/* APP BACKGROUND */
-
-.stApp {
-    background: linear-gradient(
-        135deg,
-        #f4f7fb 0%,
-        #edf2f7 50%,
-        #e6ecf5 100%
-    );
-}
-
 /* SIDEBAR */
 
 section[data-testid="stSidebar"] {
+
     background: linear-gradient(
         180deg,
-        #dde7f3 0%,
-        #edf2f7 100%
+        #152434 0%,
+        #1c3147 100%
     );
-    border-right: 1px solid #cbd5e1;
+
+    border-right: 1px solid #2f4257;
 }
 
-/* TITLES */
+/* KEEP SIDEBAR TEXT WHITE */
 
-.main-title {
-    font-size: 58px;
-    font-weight: 800;
-    color: #0f172a;
-    margin-bottom: 0;
+section[data-testid="stSidebar"] * {
+    color: white !important;
 }
 
-.sub-title {
-    font-size: 20px;
-    color: #64748b;
-    margin-top: -10px;
-}
+/* ONLY LOGIN ROLE SELECTED TEXT BLACK */
 
-/* CARDS */
-
-.card {
-    background: rgba(255,255,255,0.82);
-    border-radius: 24px;
-    padding: 26px;
-    margin-bottom: 22px;
-    border: 1px solid rgba(255,255,255,0.5);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    backdrop-filter: blur(10px);
-}
-
-.metric-card {
-    background: white;
-    border-radius: 20px;
-    padding: 24px;
-    text-align: center;
-    box-shadow: 0 8px 22px rgba(0,0,0,0.05);
-}
-
-.metric-number {
-    font-size: 40px;
-    font-weight: 800;
-    color: #2563eb;
-}
-
-.metric-text {
-    color: #64748b;
-    font-size: 15px;
-}
-
-/* CHAT */
-
-.chat-user {
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #4f46e5
-    );
-    color: white;
-    padding: 18px;
-    border-radius: 18px;
-    margin-top: 12px;
-}
-
-.chat-ai {
-    background: white;
-    padding: 18px;
-    border-radius: 18px;
-    margin-top: 12px;
-    border: 1px solid #dbeafe;
-}
-
-/* ALERTS */
-
-.success-box {
-    background: #ecfdf5;
-    border: 1px solid #bbf7d0;
-    padding: 18px;
-    border-radius: 18px;
-}
-
-.warning-box {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    padding: 18px;
-    border-radius: 18px;
-}
-
-.info-box {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    padding: 18px;
-    border-radius: 18px;
-}
-
-/* BUTTONS */
-
-.stButton > button {
-    width: 100%;
-    border-radius: 14px;
-    border: none;
-    padding: 14px;
-    background: linear-gradient(
-        135deg,
-        #4f46e5,
-        #2563eb
-    );
-    color: white;
-    font-weight: 700;
-}
-
-/* INPUTS */
-
-textarea, input {
-    border-radius: 14px !important;
-}
-
-/* SKILL PILLS */
-
-.skill-pill {
-    background: #dbeafe;
-    color: #1d4ed8;
-    padding: 8px 14px;
-    border-radius: 18px;
-    margin: 4px;
-    display: inline-block;
-    font-weight: 600;
+.stSelectbox [data-baseweb="select"] span {
+    color: black !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
+
 # =========================================================
 # SIDEBAR
 # =========================================================
@@ -255,7 +116,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
 <div class='card'>
 
-<h2 style='color:#2563eb;'>
+<h2 style='color:#23364d;'>
 AI Business Copilot
 </h2>
 
@@ -287,7 +148,7 @@ with col2:
     ask_ai = st.button("Ask AI")
 
 # =========================================================
-# AI RESPONSE ENGINE
+# AI RESPONSE
 # =========================================================
 
 if ask_ai and user_query:
@@ -296,11 +157,9 @@ if ask_ai and user_query:
         ("user", user_query)
     )
 
-    user_lower = user_query.lower()
+    responses = [
 
-    if "sales" in user_lower or "crm" in user_lower:
-
-        ai_reply = """
+        """
 Sales & CRM Optimization Strategy
 
 1. AI Lead Scoring
@@ -317,120 +176,68 @@ Identify churn risks proactively.
 
 5. Personalized Outreach
 Improve response rates with AI-generated messaging.
+""",
 
-Business Impact:
-• Increased revenue
-• Better customer retention
-• Faster sales conversion
-"""
+        """
+Finance Intelligence Report
 
-    elif "finance" in user_lower:
+1. Budget Forecasting
+Predict operational costs using AI.
 
-        ai_reply = """
-Financial Automation Insights
+2. Expense Monitoring
+Detect abnormal financial patterns.
 
-1. Expense Monitoring
-Track unusual financial patterns automatically.
+3. KPI Analytics
+Track ROI and enterprise growth.
 
-2. Budget Forecasting
-Use AI to predict future operational expenses.
+4. Invoice Automation
+Reduce manual finance tasks.
 
-3. Invoice Automation
-Reduce manual finance operations workload.
+5. Fraud Detection
+Identify suspicious transactions quickly.
+""",
 
-4. Fraud Detection
-Identify suspicious transactions in real-time.
-
-5. KPI Analytics
-Track ROI and revenue growth efficiently.
-
-Expected Benefits:
-• Reduced costs
-• Faster reporting
-• Improved transparency
-"""
-
-    elif "operations" in user_lower:
-
-        ai_reply = """
+        """
 Operations Intelligence Report
 
 1. Workflow Monitoring
-Identify bottlenecks affecting delivery timelines.
+Detect delivery bottlenecks.
 
 2. Resource Optimization
-Improve allocation of infrastructure and employees.
+Improve infrastructure utilization.
 
-3. Productivity Analytics
-Track operational efficiency continuously.
+3. Predictive Alerts
+Prevent operational failures.
 
-4. Predictive Alerts
-Prevent operational failures proactively.
+4. Productivity Analytics
+Track enterprise efficiency.
 
-5. AI Automation
-Optimize repetitive enterprise tasks.
-
-Operational Impact:
-• Better scalability
-• Higher efficiency
-• Reduced downtime
+5. Automation
+Reduce repetitive operational tasks.
 """
+    ]
 
-    elif "hr" in user_lower or "hiring" in user_lower:
-
-        ai_reply = """
-HR Automation Insights
-
-1. Resume Screening
-Rank candidates using AI-based skill analysis.
-
-2. Candidate Intelligence
-Analyze certifications and project experience.
-
-3. Recruitment Optimization
-Identify hiring pipeline delays.
-
-4. Workforce Analytics
-Track employee productivity and engagement.
-
-5. Interview Recommendations
-Suggest top candidates for interviews.
-
-Benefits:
-• Faster hiring
-• Better talent acquisition
-• Reduced HR workload
-"""
-
-    else:
-
-        ai_reply = f"""
-Enterprise AI Analysis
-
-Query:
-"{user_query}"
-
-Recommendations:
-
-1. Automate repetitive workflows.
-
-2. Centralize business operations into smart dashboards.
-
-3. Use predictive analytics for decision-making.
-
-4. Improve customer engagement with AI automation.
-
-5. Optimize enterprise productivity continuously.
-
-Business Impact:
-• Higher efficiency
-• Reduced operational costs
-• Better scalability
-"""
+    ai_reply = random.choice(responses)
 
     st.session_state.chat_history.append(
         ("ai", ai_reply)
     )
+
+# =========================================================
+# CLEAR CHAT
+# =========================================================
+
+colx, coly = st.columns([6,1])
+
+with coly:
+
+    if st.button("Clear Chat"):
+        st.session_state.chat_history = []
+        st.rerun()
+
+# =========================================================
+# CHAT DISPLAY
+# =========================================================
 
 # =========================================================
 # CHAT DISPLAY
@@ -438,52 +245,36 @@ Business Impact:
 
 for role_name, message in st.session_state.chat_history:
 
+    safe_message = message.replace("<", "&lt;").replace(">", "&gt;")
+
     if role_name == "user":
 
         st.markdown(f"""
-        <div class='chat-user'>
-        <b>You:</b><br><br>
-        {message}
-        </div>
-        """, unsafe_allow_html=True)
+<div class='chat-user'>
+<b>You:</b><br><br>
+{safe_message}
+</div>
+""", unsafe_allow_html=True)
 
     else:
 
-        st.markdown(f"""
-        <div class='chat-ai'>
-        <b style='color:#2563eb;'>
-        NexusFlow AI Assistant
-        </b>
-        <br><br>
-        {message}
-        </div>
-        """, unsafe_allow_html=True)
+        formatted_message = safe_message.replace("\n", "<br>")
 
-st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(f"""
+<div class='chat-ai'>
+<b style='color:#23364d;'>
+NexusFlow AI Assistant
+</b>
+<br><br>
+{formatted_message}
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================================
 # DASHBOARD
 # =========================================================
 
 if page == "Dashboard":
-
-    st.markdown("""
-    <div class='card'>
-
-    <h2 style='color:#2563eb;'>
-    Executive Overview
-    </h2>
-
-    AI automated 142 enterprise workflows this week.
-
-    Hiring efficiency improved by 72%.
-
-    Finance AI identified optimization opportunities.
-
-    Operations AI proactively detected workflow bottlenecks.
-
-    </div>
-    """, unsafe_allow_html=True)
 
     c1, c2, c3, c4 = st.columns(4)
 
@@ -541,69 +332,19 @@ elif page == "HR Automation":
 
     st.subheader("AI Resume Screening")
 
-    jd = st.text_area(
-        "Job Description",
-        height=180,
-        value="""
-Hiring Senior Backend Developer
-
-Required Skills:
-Python, FastAPI, Docker, Kubernetes, AWS and PostgreSQL.
-"""
-    )
-
-    resume = st.text_area(
-        "Candidate Resume",
-        height=250,
-        value="""
-Senior Backend Developer
-
-Skills:
-Python, FastAPI, Docker, Kubernetes, AWS, PostgreSQL
-"""
-    )
-
     if st.button("Analyze Candidate"):
 
-        score = 92
-
-        st.markdown(f"""
+        st.markdown("""
         <div class='success-box'>
 
         <h2>
-        🥇 Candidate Match Score
+        Candidate Match Score: 92/100
         </h2>
-
-        <h1>
-        {score}/100
-        </h1>
 
         Strong technical alignment detected.
 
         </div>
         """, unsafe_allow_html=True)
-
-        st.markdown("### Skill Match")
-
-        skills = [
-            "Python",
-            "FastAPI",
-            "Docker",
-            "AWS",
-            "PostgreSQL"
-        ]
-
-        pills = ""
-
-        for skill in skills:
-
-            pills += f"""
-            <span class='skill-pill'>
-            ✓ {skill}
-            </span>
-            """
-
-        st.markdown(pills, unsafe_allow_html=True)
 
 # =========================================================
 # FINANCE
@@ -611,26 +352,12 @@ Python, FastAPI, Docker, Kubernetes, AWS, PostgreSQL
 
 elif page == "Finance Automation":
 
-    st.subheader("AI Financial Analyzer")
-
-    finance_text = st.text_area(
-        "Financial Report",
-        height=220,
-        value="""
-• Cloud infrastructure expenses increased
-• Operational costs optimized
-• Predicted revenue growth: 14%
-"""
-    )
+    st.subheader("Finance Intelligence")
 
     if st.button("Analyze Finance"):
 
         st.markdown("""
         <div class='warning-box'>
-
-        <h2>
-        Financial Optimization Required
-        </h2>
 
         AI detected increasing operational expenses.
 
@@ -640,23 +367,6 @@ elif page == "Finance Automation":
         </div>
         """, unsafe_allow_html=True)
 
-        finance_chart = pd.DataFrame({
-            "Month": [
-                "Jan","Feb","Mar",
-                "Apr","May","Jun"
-            ],
-            "Expenses": [
-                2.1,2.5,3.0,
-                3.7,4.3,5.0
-            ]
-        })
-
-        st.area_chart(
-            finance_chart,
-            x="Month",
-            y="Expenses"
-        )
-
 # =========================================================
 # OPERATIONS
 # =========================================================
@@ -665,29 +375,15 @@ elif page == "Operations Automation":
 
     st.subheader("Operations Intelligence")
 
-    ops = st.text_area(
-        "Operations Report",
-        height=220,
-        value="""
-• Backend deployment delayed
-• QA resources overloaded
-• Infrastructure utilization at 87%
-"""
-    )
-
     if st.button("Analyze Operations"):
 
         st.markdown("""
         <div class='info-box'>
 
-        <h2>
-        Operational Alert
-        </h2>
-
         Workflow bottlenecks detected.
 
         Recommended:
-        Increase QA resources and optimize deployments.
+        Increase QA resources.
 
         </div>
         """, unsafe_allow_html=True)
@@ -700,32 +396,16 @@ elif page == "Sales Intelligence":
 
     st.subheader("AI Lead Scoring")
 
-    lead = st.text_area(
-        "Lead Details",
-        height=220,
-        value="""
-Company: MediCore Healthcare
-
-Requirements:
-• CRM automation
-• Analytics dashboards
-• AI support systems
-"""
-    )
-
     if st.button("Analyze Lead"):
 
         st.markdown("""
         <div class='card'>
 
-        <h2 style='color:#2563eb;'>
+        <h2 style='color:#23364d;'>
         Lead Score: 94/100
         </h2>
 
         High conversion probability detected.
-
-        Recommended:
-        Immediate executive sales follow-up.
 
         </div>
         """, unsafe_allow_html=True)
@@ -735,8 +415,6 @@ Requirements:
 # =========================================================
 
 elif page == "Analytics":
-
-    st.subheader("Enterprise Analytics Dashboard")
 
     chart1 = pd.DataFrame({
         "Month": [
@@ -754,51 +432,30 @@ elif page == "Analytics":
         y="Hiring"
     )
 
-    chart2 = pd.DataFrame({
-        "Month": [
-            "Jan","Feb","Mar",
-            "Apr","May"
-        ],
-        "Savings": [
-            12,18,25,33,46
-        ]
-    })
-
-    st.area_chart(
-        chart2,
-        x="Month",
-        y="Savings"
-    )
-
 # =========================================================
 # AUDIT LOGS
 # =========================================================
 
 elif page == "Audit Logs":
 
-    st.subheader("Audit Logs")
-
     logs = pd.DataFrame({
 
         "Time": [
             "10:22 AM",
             "10:31 AM",
-            "10:44 AM",
-            "11:02 AM"
+            "10:44 AM"
         ],
 
         "User": [
             "HR Manager",
             "Finance Officer",
-            "Admin",
-            "Operations Lead"
+            "Admin"
         ],
 
         "Action": [
             "Resume Screened",
             "Risk Analysis Completed",
-            "AI Report Generated",
-            "Workflow Alert Triggered"
+            "AI Report Generated"
         ]
     })
 
