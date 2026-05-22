@@ -316,7 +316,7 @@ Ask anything related to:
 </div>
 """, unsafe_allow_html=True)
 
-col1, col2 = st.columns([5,1])
+col1, col2, col3 = st.columns([5,1,1])
 
 with col1:
 
@@ -330,6 +330,16 @@ with col2:
     st.markdown("<br>", unsafe_allow_html=True)
 
     ask_ai = st.button("Ask AI")
+
+with col3:
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    clear_chat = st.button("Clear Chat")
+
+    if clear_chat:
+        st.session_state.chat_history = []
+        st.rerun()
 
 # =========================================================
 # AI RESPONSE ENGINE
