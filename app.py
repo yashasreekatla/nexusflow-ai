@@ -27,7 +27,48 @@ if "chat_history" not in st.session_state:
 st.markdown("""
 <style>
 
-/* SIDEBAR */
+/* =========================================================
+GLOBAL
+========================================================= */
+
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+[data-testid="stHeader"] {
+    background: transparent;
+}
+
+[data-testid="collapsedControl"] {
+    display: flex !important;
+}
+
+.block-container {
+    padding-top: 1.2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* =========================================================
+BACKGROUND
+========================================================= */
+
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #eef2f7 0%,
+        #e9eef5 50%,
+        #e4ebf4 100%
+    );
+}
+
+/* =========================================================
+SIDEBAR
+========================================================= */
 
 section[data-testid="stSidebar"] {
 
@@ -40,16 +81,241 @@ section[data-testid="stSidebar"] {
     border-right: 1px solid #2f4257;
 }
 
-/* KEEP SIDEBAR TEXT WHITE */
-
 section[data-testid="stSidebar"] * {
-    color: white !important;
+    color: #ffffff !important;
 }
 
-/* ONLY LOGIN ROLE SELECTED TEXT BLACK */
+/* =========================================================
+TITLES
+========================================================= */
 
-.stSelectbox [data-baseweb="select"] span {
-    color: black !important;
+.main-title {
+
+    font-size: 58px;
+    font-weight: 800;
+    letter-spacing: -1px;
+
+    color: #0f172a;
+
+    margin-bottom: 0;
+}
+
+.sub-title {
+
+    font-size: 20px;
+    font-weight: 500;
+
+    color: #64748b;
+
+    margin-top: -10px;
+}
+
+/* =========================================================
+CARDS
+========================================================= */
+
+.card {
+
+    background: rgba(248,250,252,0.82);
+
+    border-radius: 26px;
+
+    padding: 28px;
+
+    margin-bottom: 24px;
+
+    border: 1px solid #dbe4ee;
+
+    box-shadow:
+        0 8px 30px rgba(15,23,42,0.06);
+
+    backdrop-filter: blur(12px);
+}
+
+/* =========================================================
+METRICS
+========================================================= */
+
+.metric-card {
+
+    background: rgba(255,255,255,0.88);
+
+    border-radius: 24px;
+
+    padding: 26px;
+
+    text-align: center;
+
+    border: 1px solid #dbe4ee;
+
+    box-shadow:
+        0 8px 24px rgba(15,23,42,0.05);
+}
+
+.metric-number {
+
+    font-size: 42px;
+
+    font-weight: 800;
+
+    color: #23364d;
+}
+
+.metric-text {
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    margin-top: 4px;
+}
+
+/* =========================================================
+BUTTONS
+========================================================= */
+
+.stButton > button {
+
+    width: 100%;
+
+    border-radius: 16px;
+
+    border: none;
+
+    padding: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #23364d,
+        #304861
+    );
+
+    color: white;
+
+    font-weight: 700;
+
+    font-size: 15px;
+
+    transition: 0.3s ease;
+}
+
+.stButton > button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 20px rgba(35,54,77,0.2);
+}
+
+/* =========================================================
+INPUTS
+========================================================= */
+
+textarea,
+input {
+
+    border-radius: 16px !important;
+
+    border: 1px solid #dbe4ee !important;
+
+    background: rgba(255,255,255,0.9) !important;
+}
+
+/* =========================================================
+CHAT
+========================================================= */
+
+.chat-user {
+
+    background: linear-gradient(
+        135deg,
+        #23364d,
+        #304861
+    );
+
+    color: white;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    margin-top: 12px;
+
+    box-shadow:
+        0 6px 20px rgba(35,54,77,0.18);
+}
+
+.chat-ai {
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe4ee;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    margin-top: 12px;
+
+    color: #0f172a;
+}
+
+/* =========================================================
+ALERTS
+========================================================= */
+
+.success-box {
+
+    background: #edfdf3;
+
+    border: 1px solid #bbf7d0;
+
+    padding: 18px;
+
+    border-radius: 18px;
+}
+
+.warning-box {
+
+    background: #fff8ed;
+
+    border: 1px solid #fed7aa;
+
+    padding: 18px;
+
+    border-radius: 18px;
+}
+
+.info-box {
+
+    background: #eef4ff;
+
+    border: 1px solid #c7d7f8;
+
+    padding: 18px;
+
+    border-radius: 18px;
+}
+
+/* =========================================================
+SKILL PILLS
+========================================================= */
+
+.skill-pill {
+
+    background: #dbe7f5;
+
+    color: #304861;
+
+    padding: 8px 14px;
+
+    border-radius: 18px;
+
+    margin: 4px;
+
+    display: inline-block;
+
+    font-weight: 600;
 }
 
 </style>
