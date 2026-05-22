@@ -7,7 +7,7 @@ import random
 # =========================================================
 
 st.set_page_config(
-    page_title="Atlas AI",
+    page_title="NexusFlow AI",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -194,6 +194,41 @@ textarea, input {
 
 </style>
 """, unsafe_allow_html=True)
+# =========================================================
+# SIDEBAR
+# =========================================================
+
+with st.sidebar:
+
+    st.title("NexusFlow AI")
+
+    role = st.selectbox(
+        "Login Role",
+        [
+            "Admin",
+            "HR Manager",
+            "Finance Officer",
+            "Operations Lead",
+            "Sales Director"
+        ]
+    )
+
+    st.success(f"Logged in as {role}")
+
+    st.divider()
+
+    page = st.radio(
+        "Navigation",
+        [
+            "Dashboard",
+            "HR Automation",
+            "Finance Automation",
+            "Operations Automation",
+            "Sales Intelligence",
+            "Analytics",
+            "Audit Logs"
+        ]
+    )
 
 # =========================================================
 # HEADER
@@ -201,7 +236,7 @@ textarea, input {
 
 st.markdown("""
 <div class='main-title'>
-Atlas AI
+NexusFlow AI
 </div>
 """, unsafe_allow_html=True)
 
@@ -241,7 +276,7 @@ col1, col2 = st.columns([5,1])
 with col1:
 
     user_query = st.text_input(
-        "Ask Atlas AI Anything",
+        "Ask NexusFlow AI Anything",
         placeholder="How can I improve my sales and CRM?"
     )
 
@@ -783,7 +818,7 @@ st.markdown("""
 
 <p style='color:#64748b;'>
 
-Atlas AI © 2026
+NexusFlow AI © 2026
 Enterprise Workflow Automation Platform
 
 </p>
