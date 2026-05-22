@@ -81,8 +81,24 @@ section[data-testid="stSidebar"] {
     border-right: 1px solid #2f4257;
 }
 
+/* SIDEBAR TEXT WHITE */
+
 section[data-testid="stSidebar"] * {
     color: #ffffff !important;
+}
+
+/* =========================================================
+LOGIN ROLE SELECTED TEXT ONLY BLACK
+========================================================= */
+
+div[data-baseweb="select"] span {
+    color: black !important;
+}
+
+/* Keep dropdown options readable */
+
+ul[role="listbox"] li {
+    color: black !important;
 }
 
 /* =========================================================
