@@ -24,6 +24,10 @@ if "chat_history" not in st.session_state:
 # CUSTOM CSS
 # =========================================================
 
+# =========================================================
+# CUSTOM CSS
+# =========================================================
+
 st.markdown("""
 <style>
 
@@ -125,6 +129,10 @@ section[data-testid="stSidebar"] {
     padding: 18px;
     border-radius: 18px;
     margin-top: 12px;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .chat-ai {
@@ -133,6 +141,10 @@ section[data-testid="stSidebar"] {
     border-radius: 18px;
     margin-top: 12px;
     border: 1px solid #dbeafe;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 /* ALERTS */
@@ -180,6 +192,22 @@ textarea, input {
     border-radius: 14px !important;
 }
 
+/* FIX LOGIN ROLE TEXT COLOR */
+
+div[data-baseweb="select"] input {
+    color: black !important;
+}
+
+div[data-baseweb="select"] span {
+    color: black !important;
+}
+
+/* TEXT INPUT COLOR */
+
+input[type="text"] {
+    color: black !important;
+}
+
 /* SKILL PILLS */
 
 .skill-pill {
@@ -190,6 +218,23 @@ textarea, input {
     margin: 4px;
     display: inline-block;
     font-weight: 600;
+}
+
+/* REMOVE RANDOM CODE/DIV BLOCK ISSUE */
+
+code {
+    white-space: pre-wrap !important;
+}
+
+pre {
+    white-space: pre-wrap !important;
+    overflow-x: auto !important;
+}
+
+/* HIDE STREAMLIT DEFAULT FOOTER */
+
+footer {
+    visibility: hidden;
 }
 
 </style>
@@ -436,30 +481,44 @@ Business Impact:
 # CHAT DISPLAY
 # =========================================================
 
+# =========================================================
+# CHAT DISPLAY
+# =========================================================
+
 for role_name, message in st.session_state.chat_history:
+
+    formatted_message = (
+        str(message)
+        .replace("\n", "<br>")
+        .replace("•", "&bull;")
+    )
 
     if role_name == "user":
 
-        st.markdown(f"""
-        <div class='chat-user'>
-        <b>You:</b><br><br>
-        {message}
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="chat-user">
+                <b>You:</b><br><br>
+                {formatted_message}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     else:
 
-        st.markdown(f"""
-        <div class='chat-ai'>
-        <b style='color:#2563eb;'>
-        NexusFlow AI Assistant
-        </b>
-        <br><br>
-        {message}
-        </div>
-        """, unsafe_allow_html=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="chat-ai">
+                <b style="color:#2563eb;">
+                    NexusFlow AI Assistant
+                </b>
+                <br><br>
+                {formatted_message}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 # =========================================================
 # DASHBOARD
