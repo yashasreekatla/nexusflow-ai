@@ -1,684 +1,828 @@
 import streamlit as st
 import pandas as pd
 import random
-import time
 
 # =========================================================
 # PAGE CONFIG
 # =========================================================
 
 st.set_page_config(
-    page_title="Atlas AI",
-    page_icon="💼",
+    page_title="NexusFlow AI",
+    page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # =========================================================
 # SESSION STATE
 # =========================================================
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # =========================================================
-# CSS
+# CUSTOM CSS
 # =========================================================
 
 st.markdown("""
 <style>
 
-/* =========================================================
-GLOBAL
-========================================================= */
+/* KEEP STREAMLIT HEADER FOR SIDEBAR BUTTON */
 
-#MainMenu {display:none;}
-footer {display:none;}
-header {display:none;}
-
-.block-container{
-    padding:0 !important;
+[data-testid="stHeader"] {
+    background: transparent;
 }
 
-.stApp{
-    background:#f4f7fb;
-    font-family:Inter,sans-serif;
+/* SHOW SIDEBAR TOGGLE */
+
+[data-testid="collapsedControl"] {
+    display: flex !important;
 }
 
-/* =========================================================
-LOGIN PAGE
-========================================================= */
+/* REMOVE TOP GAP */
 
-.wrapper{
-    display:flex;
-    height:100vh;
-    width:100vw;
-    overflow:hidden;
+.block-container {
+    padding-top: 1rem;
 }
 
-.left{
-    width:55%;
-    background:linear-gradient(
-        180deg,
-        #0d1b2a 0%,
-        #13263c 100%
+/* APP BACKGROUND */
+
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #f4f7fb 0%,
+        #edf2f7 50%,
+        #e6ecf5 100%
     );
-
-    color:white;
-    padding:60px;
-    position:relative;
 }
 
-.logo{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    font-size:34px;
-    font-weight:700;
+/* SIDEBAR */
+
+section[data-testid="stSidebar"] {
+    background: linear-gradient(
+        180deg,
+        #dde7f3 0%,
+        #edf2f7 100%
+    );
+    border-right: 1px solid #cbd5e1;
 }
 
-.logo-icon{
-    width:46px;
-    height:46px;
-    border-radius:14px;
-    background:#36a9ff;
+/* TITLES */
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:24px;
+.main-title {
+    font-size: 58px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0;
 }
 
-.hero{
-    margin-top:220px;
+.sub-title {
+    font-size: 20px;
+    color: #64748b;
+    margin-top: -10px;
 }
 
-.hero-title{
-    font-size:68px;
-    line-height:1.05;
-    font-weight:700;
-    max-width:650px;
+/* CARDS */
+
+.card {
+    background: rgba(255,255,255,0.82);
+    border-radius: 24px;
+    padding: 26px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
 }
 
-.hero-sub{
-    margin-top:32px;
-    font-size:24px;
-    line-height:1.7;
-    color:#cbd5e1;
-    max-width:700px;
+.metric-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.05);
 }
 
-.footer{
-    position:absolute;
-    bottom:40px;
-    color:#94a3b8;
-    font-size:18px;
+.metric-number {
+    font-size: 40px;
+    font-weight: 800;
+    color: #2563eb;
 }
 
-.right{
-    width:45%;
-    background:#f4f7fb;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.metric-text {
+    color: #64748b;
+    font-size: 15px;
 }
 
-.card{
-    width:520px;
+/* CHAT */
+
+.chat-user {
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+    color: white;
+    padding: 18px;
+    border-radius: 18px;
+    margin-top: 12px;
 }
 
-.auth-title{
-    font-size:64px;
-    font-weight:700;
-    color:#0f172a;
+.chat-ai {
+    background: white;
+    padding: 18px;
+    border-radius: 18px;
+    margin-top: 12px;
+    border: 1px solid #dbeafe;
 }
 
-.auth-sub{
-    margin-top:10px;
-    color:#64748b;
-    font-size:22px;
-    margin-bottom:40px;
+/* ALERTS */
+
+.success-box {
+    background: #ecfdf5;
+    border: 1px solid #bbf7d0;
+    padding: 18px;
+    border-radius: 18px;
 }
 
-.tabs{
-    display:flex;
-    background:#e7edf5;
-    padding:6px;
-    border-radius:18px;
-    margin-bottom:40px;
+.warning-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 18px;
+    border-radius: 18px;
 }
 
-.active{
-    width:50%;
-    background:white;
-    padding:16px;
-    border-radius:14px;
-    text-align:center;
-    font-weight:700;
-    font-size:20px;
+.info-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 18px;
+    border-radius: 18px;
 }
 
-.inactive{
-    width:50%;
-    padding:16px;
-    text-align:center;
-    color:#475569;
-    font-size:20px;
+/* BUTTONS */
+
+.stButton > button {
+    width: 100%;
+    border-radius: 14px;
+    border: none;
+    padding: 14px;
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #2563eb
+    );
+    color: white;
+    font-weight: 700;
 }
 
-.label{
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:10px;
-    margin-top:18px;
-    color:#0f172a;
+/* INPUTS */
+
+textarea, input {
+    border-radius: 14px !important;
 }
 
-.stTextInput input{
-    height:62px !important;
-    border-radius:18px !important;
-    border:1px solid #d9e2ec !important;
-    padding-left:18px !important;
-    font-size:18px !important;
-}
+/* SKILL PILLS */
 
-.stButton button{
-    width:100%;
-    height:62px;
-    border:none;
-    border-radius:18px;
-    background:#23364d;
-    color:white;
-    font-size:20px;
-    font-weight:700;
-    margin-top:30px;
-}
-
-/* =========================================================
-DASHBOARD
-========================================================= */
-
-.dashboard{
-    padding:40px;
-}
-
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:30px;
-}
-
-.dashboard-title{
-    font-size:52px;
-    font-weight:800;
-    color:#0f172a;
-}
-
-.dashboard-sub{
-    color:#64748b;
-    font-size:20px;
-}
-
-.card-ui{
-    background:white;
-    padding:28px;
-    border-radius:24px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.04);
-    margin-bottom:24px;
-}
-
-.metric{
-    text-align:center;
-}
-
-.metric-number{
-    font-size:42px;
-    font-weight:800;
-    color:#2563eb;
-}
-
-.metric-label{
-    color:#64748b;
-    font-size:16px;
-}
-
-.section-title{
-    font-size:32px;
-    font-weight:700;
-    margin-bottom:18px;
-    color:#0f172a;
-}
-
-.chat-box{
-    background:#eef4ff;
-    padding:18px;
-    border-radius:18px;
-    margin-top:12px;
-}
-
-.user-box{
-    background:#1e293b;
-    color:white;
-    padding:18px;
-    border-radius:18px;
-    margin-top:12px;
-}
-
-.sidebar-box{
-    background:white;
-    padding:18px;
-    border-radius:18px;
-    margin-bottom:20px;
-}
-
-.alert-success{
-    background:#ecfdf5;
-    border:1px solid #bbf7d0;
-    padding:16px;
-    border-radius:16px;
-    margin-top:12px;
-}
-
-.alert-warning{
-    background:#fff7ed;
-    border:1px solid #fed7aa;
-    padding:16px;
-    border-radius:16px;
-    margin-top:12px;
-}
-
-.alert-danger{
-    background:#fef2f2;
-    border:1px solid #fecaca;
-    padding:16px;
-    border-radius:16px;
-    margin-top:12px;
+.skill-pill {
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 8px 14px;
+    border-radius: 18px;
+    margin: 4px;
+    display: inline-block;
+    font-weight: 600;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# LOGIN PAGE
+# SIDEBAR
 # =========================================================
 
-if not st.session_state.logged_in:
+with st.sidebar:
 
-    left,right = st.columns([1.2,1])
+    st.title("NexusFlow AI")
 
-    with left:
+    role = st.selectbox(
+        "Login Role",
+        [
+            "Admin",
+            "HR Manager",
+            "Finance Officer",
+            "Operations Lead",
+            "Sales Director"
+        ]
+    )
 
-        st.markdown("""
-        <div class="left">
+    st.success(f"Logged in as {role}")
 
-            <div class="logo">
-                <div class="logo-icon">⚙️</div>
-                <div>Atlas</div>
-            </div>
+    st.divider()
 
-            <div class="hero">
-
-                <div class="hero-title">
-                    One agent for every business workflow.
-                </div>
-
-                <div class="hero-sub">
-                    Sales pipeline, hiring, project execution,
-                    finance automation and customer support —
-                    orchestrated by AI, with role-based access
-                    and enterprise-grade audit trails.
-                </div>
-
-            </div>
-
-            <div class="footer">
-                © Atlas Operations
-            </div>
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    with right:
-
-        st.markdown("""
-        <div style="padding:120px 80px;">
-
-        <div class="auth-title">
-            Sign in to Atlas
-        </div>
-
-        <div class="auth-sub">
-            Continue with email or Google.
-        </div>
-
-        <div class="tabs">
-            <div class="active">Sign in</div>
-            <div class="inactive">Create account</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        email = st.text_input(
-            "Email",
-            placeholder="Enter your email"
-        )
-
-        password = st.text_input(
-            "Password",
-            type="password",
-            placeholder="Enter your password"
-        )
-
-        if st.button("Sign in"):
-
-            if email and password:
-
-                st.session_state.logged_in = True
-                st.rerun()
-
-            else:
-                st.error("Enter email and password")
-
-        st.markdown("""
-        </div>
-        """, unsafe_allow_html=True)
+    page = st.radio(
+        "Navigation",
+        [
+            "Dashboard",
+            "HR Automation",
+            "Finance Automation",
+            "Operations Automation",
+            "Sales Intelligence",
+            "Analytics",
+            "Audit Logs"
+        ]
+    )
 
 # =========================================================
-# MAIN DASHBOARD
+# HEADER
 # =========================================================
 
-else:
+st.markdown("""
+<div class='main-title'>
+NexusFlow AI
+</div>
+""", unsafe_allow_html=True)
 
-    # =====================================================
-    # SIDEBAR
-    # =====================================================
+st.markdown("""
+<div class='sub-title'>
+Enterprise Workflow Automation Platform
+</div>
+""", unsafe_allow_html=True)
 
-    with st.sidebar:
+st.markdown("<br>", unsafe_allow_html=True)
 
-        st.markdown("## Atlas AI")
+# =========================================================
+# AI COPILOT
+# =========================================================
 
-        st.markdown("""
-        <div class="sidebar-box">
-        <b>Role:</b> Enterprise Admin
+st.markdown("""
+<div class='card'>
+
+<h2 style='color:#2563eb;'>
+AI Business Copilot
+</h2>
+
+Ask anything related to:
+• HR
+• CRM
+• Finance
+• Operations
+• Sales
+• Productivity
+• Business Automation
+
+</div>
+""", unsafe_allow_html=True)
+
+col1, col2 = st.columns([5,1])
+
+with col1:
+
+    user_query = st.text_input(
+        "Ask NexusFlow AI Anything",
+        placeholder="How can I improve my sales and CRM?"
+    )
+
+with col2:
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    ask_ai = st.button("Ask AI")
+
+# =========================================================
+# AI RESPONSE ENGINE
+# =========================================================
+
+if ask_ai and user_query:
+
+    st.session_state.chat_history.append(
+        ("user", user_query)
+    )
+
+    user_lower = user_query.lower()
+
+    if "sales" in user_lower or "crm" in user_lower:
+
+        ai_reply = """
+Sales & CRM Optimization Strategy
+
+1. AI Lead Scoring
+Use predictive analytics to identify high-conversion prospects.
+
+2. CRM Workflow Automation
+Automate follow-ups and customer engagement tracking.
+
+3. Funnel Analytics
+Track conversion performance at each stage.
+
+4. Customer Retention Intelligence
+Identify churn risks proactively.
+
+5. Personalized Outreach
+Improve response rates with AI-generated messaging.
+
+Business Impact:
+• Increased revenue
+• Better customer retention
+• Faster sales conversion
+"""
+
+    elif "finance" in user_lower:
+
+        ai_reply = """
+Financial Automation Insights
+
+1. Expense Monitoring
+Track unusual financial patterns automatically.
+
+2. Budget Forecasting
+Use AI to predict future operational expenses.
+
+3. Invoice Automation
+Reduce manual finance operations workload.
+
+4. Fraud Detection
+Identify suspicious transactions in real-time.
+
+5. KPI Analytics
+Track ROI and revenue growth efficiently.
+
+Expected Benefits:
+• Reduced costs
+• Faster reporting
+• Improved transparency
+"""
+
+    elif "operations" in user_lower:
+
+        ai_reply = """
+Operations Intelligence Report
+
+1. Workflow Monitoring
+Identify bottlenecks affecting delivery timelines.
+
+2. Resource Optimization
+Improve allocation of infrastructure and employees.
+
+3. Productivity Analytics
+Track operational efficiency continuously.
+
+4. Predictive Alerts
+Prevent operational failures proactively.
+
+5. AI Automation
+Optimize repetitive enterprise tasks.
+
+Operational Impact:
+• Better scalability
+• Higher efficiency
+• Reduced downtime
+"""
+
+    elif "hr" in user_lower or "hiring" in user_lower:
+
+        ai_reply = """
+HR Automation Insights
+
+1. Resume Screening
+Rank candidates using AI-based skill analysis.
+
+2. Candidate Intelligence
+Analyze certifications and project experience.
+
+3. Recruitment Optimization
+Identify hiring pipeline delays.
+
+4. Workforce Analytics
+Track employee productivity and engagement.
+
+5. Interview Recommendations
+Suggest top candidates for interviews.
+
+Benefits:
+• Faster hiring
+• Better talent acquisition
+• Reduced HR workload
+"""
+
+    else:
+
+        ai_reply = f"""
+Enterprise AI Analysis
+
+Query:
+"{user_query}"
+
+Recommendations:
+
+1. Automate repetitive workflows.
+
+2. Centralize business operations into smart dashboards.
+
+3. Use predictive analytics for decision-making.
+
+4. Improve customer engagement with AI automation.
+
+5. Optimize enterprise productivity continuously.
+
+Business Impact:
+• Higher efficiency
+• Reduced operational costs
+• Better scalability
+"""
+
+    st.session_state.chat_history.append(
+        ("ai", ai_reply)
+    )
+
+# =========================================================
+# CHAT DISPLAY
+# =========================================================
+
+for role_name, message in st.session_state.chat_history:
+
+    if role_name == "user":
+
+        st.markdown(f"""
+        <div class='chat-user'>
+        <b>You:</b><br><br>
+        {message}
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class="sidebar-box">
-        ✅ HR Automation<br><br>
-        ✅ CRM Intelligence<br><br>
-        ✅ Finance AI<br><br>
-        ✅ Operations Monitoring<br><br>
-        ✅ AI Assistant
+    else:
+
+        st.markdown(f"""
+        <div class='chat-ai'>
+        <b style='color:#2563eb;'>
+        NexusFlow AI Assistant
+        </b>
+        <br><br>
+        {message}
         </div>
         """, unsafe_allow_html=True)
 
-        if st.button("Logout"):
-            st.session_state.logged_in = False
-            st.rerun()
+st.markdown("<br>", unsafe_allow_html=True)
 
-    # =====================================================
-    # DASHBOARD
-    # =====================================================
+# =========================================================
+# DASHBOARD
+# =========================================================
+
+if page == "Dashboard":
 
     st.markdown("""
-    <div class="dashboard">
+    <div class='card'>
 
-    <div class="topbar">
+    <h2 style='color:#2563eb;'>
+    Executive Overview
+    </h2>
 
-        <div>
-            <div class="dashboard-title">
-                Atlas AI
-            </div>
+    AI automated 142 enterprise workflows this week.
 
-            <div class="dashboard-sub">
-                Enterprise Workflow Automation Platform
-            </div>
-        </div>
+    Hiring efficiency improved by 72%.
 
-    </div>
+    Finance AI identified optimization opportunities.
+
+    Operations AI proactively detected workflow bottlenecks.
 
     </div>
     """, unsafe_allow_html=True)
 
-    # =====================================================
-    # METRICS
-    # =====================================================
-
-    col1,col2,col3,col4 = st.columns(4)
+    c1, c2, c3, c4 = st.columns(4)
 
     metrics = [
-        ("142", "Workflows Automated"),
-        ("89%", "Sales Conversion"),
+        ("142", "AI Tasks"),
         ("72%", "Hiring Efficiency"),
-        ("34", "Operational Alerts")
+        ("₹2.4L", "Cost Savings"),
+        ("18", "Active Workflows")
     ]
 
-    for col,metric in zip([col1,col2,col3,col4],metrics):
+    for col, (value, label) in zip(
+        [c1,c2,c3,c4],
+        metrics
+    ):
 
         with col:
 
             st.markdown(f"""
-            <div class="card-ui metric">
-                <div class="metric-number">{metric[0]}</div>
-                <div class="metric-label">{metric[1]}</div>
+            <div class='metric-card'>
+            <div class='metric-number'>
+            {value}
+            </div>
+
+            <div class='metric-text'>
+            {label}
+            </div>
             </div>
             """, unsafe_allow_html=True)
 
-    # =====================================================
-    # MAIN CONTENT
-    # =====================================================
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    left,right = st.columns([1.5,1])
+    chart_data = pd.DataFrame({
+        "Month": [
+            "Jan","Feb","Mar",
+            "Apr","May","Jun"
+        ],
+        "Efficiency": [
+            42,51,59,66,73,81
+        ]
+    })
 
-    # =====================================================
-    # LEFT SIDE
-    # =====================================================
+    st.subheader("Business Automation Growth")
 
-    with left:
+    st.line_chart(
+        chart_data,
+        x="Month",
+        y="Efficiency"
+    )
 
-        # AI CHAT
+# =========================================================
+# HR AUTOMATION
+# =========================================================
 
-        st.markdown("""
-        <div class="card-ui">
-            <div class="section-title">
-                AI Business Copilot
-            </div>
-        """, unsafe_allow_html=True)
+elif page == "HR Automation":
 
-        prompt = st.text_area(
-            "",
-            placeholder="Ask anything about HR, CRM, Finance, Operations, Sales or Business Strategy...",
-            height=120
-        )
+    st.subheader("AI Resume Screening")
 
-        if st.button("Ask Atlas AI"):
+    jd = st.text_area(
+        "Job Description",
+        height=180,
+        value="""
+Hiring Senior Backend Developer
 
-            if prompt:
+Required Skills:
+Python, FastAPI, Docker, Kubernetes, AWS and PostgreSQL.
+"""
+    )
 
-                st.markdown(f"""
-                <div class="user-box">
-                {prompt}
-                </div>
-                """, unsafe_allow_html=True)
+    resume = st.text_area(
+        "Candidate Resume",
+        height=250,
+        value="""
+Senior Backend Developer
 
-                with st.spinner("Atlas AI is analyzing..."):
+Skills:
+Python, FastAPI, Docker, Kubernetes, AWS, PostgreSQL
+"""
+    )
 
-                    time.sleep(2)
+    if st.button("Analyze Candidate"):
 
-                responses = [
-                    f"""
-                    Based on your request about "{prompt}", Atlas AI recommends:
-                    
-                    • Automating repetitive workflows using AI triggers
-                    • Improving customer retention through predictive CRM analytics
-                    • Monitoring finance KPIs weekly
-                    • Using AI-driven operational forecasting
-                    • Implementing role-based reporting dashboards
-                    """,
+        score = 92
 
-                    f"""
-                    Strategic insights for "{prompt}":
-                    
-                    • Revenue optimization opportunity detected
-                    • Workflow inefficiencies identified
-                    • AI automation can reduce manual effort by 43%
-                    • Consider implementing smart escalation systems
-                    • Predictive analytics can improve forecasting accuracy
-                    """,
+        st.markdown(f"""
+        <div class='success-box'>
 
-                    f"""
-                    Atlas AI business recommendations:
-                    
-                    • Strengthen sales pipeline automation
-                    • Deploy AI-powered customer segmentation
-                    • Integrate finance approval workflows
-                    • Improve operational visibility with live dashboards
-                    • Enable automated reporting systems
-                    """
-                ]
+        <h2>
+        🥇 Candidate Match Score
+        </h2>
 
-                ai_response = random.choice(responses)
+        <h1>
+        {score}/100
+        </h1>
 
-                st.markdown(f"""
-                <div class="chat-box">
-                {ai_response}
-                </div>
-                """, unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        # HR SECTION
-
-        st.markdown("""
-        <div class="card-ui">
-            <div class="section-title">
-                HR Automation
-            </div>
-
-            <div class="alert-success">
-            AI screened 142 resumes this week.
-            </div>
-
-            <div class="alert-warning">
-            8 high-potential candidates detected.
-            </div>
-
-            <div class="alert-danger">
-            Interview scheduling delays detected in Engineering.
-            </div>
+        Strong technical alignment detected.
 
         </div>
         """, unsafe_allow_html=True)
 
-        # CRM SECTION
+        st.markdown("### Skill Match")
+
+        skills = [
+            "Python",
+            "FastAPI",
+            "Docker",
+            "AWS",
+            "PostgreSQL"
+        ]
+
+        pills = ""
+
+        for skill in skills:
+
+            pills += f"""
+            <span class='skill-pill'>
+            ✓ {skill}
+            </span>
+            """
+
+        st.markdown(pills, unsafe_allow_html=True)
+
+# =========================================================
+# FINANCE
+# =========================================================
+
+elif page == "Finance Automation":
+
+    st.subheader("AI Financial Analyzer")
+
+    finance_text = st.text_area(
+        "Financial Report",
+        height=220,
+        value="""
+• Cloud infrastructure expenses increased
+• Operational costs optimized
+• Predicted revenue growth: 14%
+"""
+    )
+
+    if st.button("Analyze Finance"):
 
         st.markdown("""
-        <div class="card-ui">
-            <div class="section-title">
-                CRM Intelligence
-            </div>
+        <div class='warning-box'>
 
-            <ul>
-                <li>Lead scoring automation active</li>
-                <li>Sales pipeline conversion improved by 18%</li>
-                <li>AI follow-up reminders generated</li>
-                <li>Customer churn prediction enabled</li>
-            </ul>
+        <h2>
+        Financial Optimization Required
+        </h2>
+
+        AI detected increasing operational expenses.
+
+        Recommended:
+        Optimize inactive cloud resources.
 
         </div>
         """, unsafe_allow_html=True)
 
-    # =====================================================
-    # RIGHT SIDE
-    # =====================================================
-
-    with right:
-
-        # FINANCE
-
-        st.markdown("""
-        <div class="card-ui">
-
-            <div class="section-title">
-                Finance Automation
-            </div>
-
-            <div class="alert-success">
-            Budget optimization opportunities identified.
-            </div>
-
-            <div class="alert-warning">
-            Vendor payment cycle approaching.
-            </div>
-
-            <div class="alert-danger">
-            Unusual expense pattern detected.
-            </div>
-
-        </div>
-        """, unsafe_allow_html=True)
-
-        # OPERATIONS
-
-        st.markdown("""
-        <div class="card-ui">
-
-            <div class="section-title">
-                Operations Monitoring
-            </div>
-
-            <ul>
-                <li>Warehouse efficiency increased by 24%</li>
-                <li>AI detected supply bottlenecks</li>
-                <li>Delivery timelines optimized</li>
-                <li>Operational forecasting enabled</li>
-            </ul>
-
-        </div>
-        """, unsafe_allow_html=True)
-
-        # PROJECT MANAGEMENT
-
-        st.markdown("""
-        <div class="card-ui">
-
-            <div class="section-title">
-                Project Intelligence
-            </div>
-
-            <ul>
-                <li>4 project deadlines approaching</li>
-                <li>AI resource allocation active</li>
-                <li>Risk prediction monitoring enabled</li>
-                <li>Cross-team collaboration improved</li>
-            </ul>
-
-        </div>
-        """, unsafe_allow_html=True)
-
-        # ANALYTICS
-
-        chart_data = pd.DataFrame({
-            "Month":["Jan","Feb","Mar","Apr","May","Jun"],
-            "Revenue":[20,35,40,50,68,82]
+        finance_chart = pd.DataFrame({
+            "Month": [
+                "Jan","Feb","Mar",
+                "Apr","May","Jun"
+            ],
+            "Expenses": [
+                2.1,2.5,3.0,
+                3.7,4.3,5.0
+            ]
         })
 
-        st.markdown("""
-        <div class="card-ui">
-            <div class="section-title">
-                Revenue Analytics
-            </div>
-        """, unsafe_allow_html=True)
-
-        st.line_chart(
-            chart_data,
+        st.area_chart(
+            finance_chart,
             x="Month",
-            y="Revenue"
+            y="Expenses"
         )
 
-        st.markdown("</div>", unsafe_allow_html=True)
+# =========================================================
+# OPERATIONS
+# =========================================================
+
+elif page == "Operations Automation":
+
+    st.subheader("Operations Intelligence")
+
+    ops = st.text_area(
+        "Operations Report",
+        height=220,
+        value="""
+• Backend deployment delayed
+• QA resources overloaded
+• Infrastructure utilization at 87%
+"""
+    )
+
+    if st.button("Analyze Operations"):
+
+        st.markdown("""
+        <div class='info-box'>
+
+        <h2>
+        Operational Alert
+        </h2>
+
+        Workflow bottlenecks detected.
+
+        Recommended:
+        Increase QA resources and optimize deployments.
+
+        </div>
+        """, unsafe_allow_html=True)
+
+# =========================================================
+# SALES
+# =========================================================
+
+elif page == "Sales Intelligence":
+
+    st.subheader("AI Lead Scoring")
+
+    lead = st.text_area(
+        "Lead Details",
+        height=220,
+        value="""
+Company: MediCore Healthcare
+
+Requirements:
+• CRM automation
+• Analytics dashboards
+• AI support systems
+"""
+    )
+
+    if st.button("Analyze Lead"):
+
+        st.markdown("""
+        <div class='card'>
+
+        <h2 style='color:#2563eb;'>
+        Lead Score: 94/100
+        </h2>
+
+        High conversion probability detected.
+
+        Recommended:
+        Immediate executive sales follow-up.
+
+        </div>
+        """, unsafe_allow_html=True)
+
+# =========================================================
+# ANALYTICS
+# =========================================================
+
+elif page == "Analytics":
+
+    st.subheader("Enterprise Analytics Dashboard")
+
+    chart1 = pd.DataFrame({
+        "Month": [
+            "Jan","Feb","Mar",
+            "Apr","May"
+        ],
+        "Hiring": [
+            45,53,61,70,79
+        ]
+    })
+
+    st.line_chart(
+        chart1,
+        x="Month",
+        y="Hiring"
+    )
+
+    chart2 = pd.DataFrame({
+        "Month": [
+            "Jan","Feb","Mar",
+            "Apr","May"
+        ],
+        "Savings": [
+            12,18,25,33,46
+        ]
+    })
+
+    st.area_chart(
+        chart2,
+        x="Month",
+        y="Savings"
+    )
+
+# =========================================================
+# AUDIT LOGS
+# =========================================================
+
+elif page == "Audit Logs":
+
+    st.subheader("Audit Logs")
+
+    logs = pd.DataFrame({
+
+        "Time": [
+            "10:22 AM",
+            "10:31 AM",
+            "10:44 AM",
+            "11:02 AM"
+        ],
+
+        "User": [
+            "HR Manager",
+            "Finance Officer",
+            "Admin",
+            "Operations Lead"
+        ],
+
+        "Action": [
+            "Resume Screened",
+            "Risk Analysis Completed",
+            "AI Report Generated",
+            "Workflow Alert Triggered"
+        ]
+    })
+
+    st.dataframe(
+        logs,
+        use_container_width=True
+    )
+
+# =========================================================
+# FOOTER
+# =========================================================
+
+st.markdown("<br><hr>", unsafe_allow_html=True)
+
+st.markdown("""
+<center>
+
+<p style='color:#64748b;'>
+
+NexusFlow AI © 2026
+Enterprise Workflow Automation Platform
+
+</p>
+
+</center>
+""", unsafe_allow_html=True)
