@@ -15,17 +15,7 @@ st.set_page_config(
 )
 
 # =========================================================
-# SESSION STATE
-# =========================================================
-
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = True
-
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-# =========================================================
-# CUSTOM CSS
+# CSS
 # =========================================================
 
 st.markdown("""
@@ -65,7 +55,7 @@ section[data-testid="stSidebar"] * {
     color: white !important;
 }
 
-/* REOPEN SIDEBAR BUTTON */
+/* SIDEBAR BUTTON */
 
 [data-testid="collapsedControl"] {
     display: flex !important;
@@ -159,7 +149,7 @@ textarea, input {
     border-radius: 16px !important;
 }
 
-/* AI CHAT */
+/* CHAT */
 
 .chat-user {
     background: #23364d;
@@ -203,24 +193,7 @@ textarea, input {
     margin-top: 14px;
 }
 
-/* CHATBOT */
-
-.bot-container {
-    background: #f8fafc;
-    border: 1px solid #d9e2ec;
-    border-radius: 24px;
-    padding: 24px;
-    margin-top: 20px;
-}
-
-/* SMALL TEXT */
-
-.small-text {
-    color: #64748b;
-    font-size: 15px;
-}
-
-/* HR TAGS */
+/* TAGS */
 
 .tag {
     display: inline-block;
@@ -231,6 +204,11 @@ textarea, input {
     margin: 4px;
     font-size: 14px;
     font-weight: 600;
+}
+
+.small-text {
+    color: #64748b;
+    font-size: 15px;
 }
 
 </style>
@@ -246,8 +224,6 @@ with st.sidebar:
 
     st.markdown("---")
 
-    st.markdown("### Modules")
-
     st.markdown("""
     ✅ HR Automation  
     ✅ CRM Intelligence  
@@ -259,7 +235,6 @@ with st.sidebar:
 
     st.markdown("---")
 
-    st.markdown("### Active User")
     st.info("Enterprise Admin")
 
 # =========================================================
@@ -305,20 +280,16 @@ for col, metric in zip([col1, col2, col3, col4], metrics):
 st.write("")
 
 # =========================================================
-# MAIN CONTENT
+# MAIN LAYOUT
 # =========================================================
 
-left, right = st.columns([1.5,1])
+left, right = st.columns([1.5, 1])
 
 # =========================================================
 # LEFT SIDE
 # =========================================================
 
 with left:
-
-    # =====================================================
-    # AI ASSISTANT
-    # =====================================================
 
     st.markdown("""
     <div class="card">
@@ -327,8 +298,8 @@ with left:
         </div>
 
         <div class="small-text">
-            Ask anything related to sales, CRM, HR,
-            finance, customer support or operations.
+            Ask anything about HR, CRM, Finance,
+            Operations or Business Strategy.
         </div>
     """, unsafe_allow_html=True)
 
@@ -348,40 +319,39 @@ with left:
             </div>
             """, unsafe_allow_html=True)
 
-            with st.spinner("Atlas AI is analyzing your business workflows..."):
-
+            with st.spinner("Atlas AI is analyzing your workflows..."):
                 time.sleep(2)
 
             responses = [
 
                 f"""
-                Based on your request regarding "{prompt}", Atlas AI recommends:
-                
-                • Implement AI-powered lead scoring for better conversions  
-                • Automate follow-up emails for inactive prospects  
-                • Monitor CRM engagement weekly  
+                Based on your request regarding "{prompt}":
+
                 • Improve customer segmentation using predictive analytics  
-                • Enable smart escalation workflows for high-priority leads  
+                • Automate follow-up workflows for inactive leads  
+                • Implement AI-powered lead scoring  
+                • Enable smart CRM reminders for sales teams  
+                • Use analytics dashboards for retention tracking  
                 """,
 
                 f"""
-                Strategic insights for "{prompt}":
-                
-                • Workflow inefficiencies detected in customer response handling  
-                • AI automation can reduce manual operational load by 43%  
-                • Predictive sales forecasting can improve conversion accuracy  
-                • Customer churn probability monitoring recommended  
+                Atlas AI strategic insights:
+
+                • Workflow inefficiencies detected  
                 • Revenue optimization opportunities identified  
+                • AI automation can reduce operational effort by 43%  
+                • Predictive forecasting recommended  
+                • Customer churn analysis advised  
                 """,
 
                 f"""
-                Atlas AI business recommendations:
-                
-                • Integrate CRM workflows with finance tracking  
-                • Enable AI-generated business reporting  
-                • Improve HR operational analytics  
-                • Deploy automated task management alerts  
-                • Use predictive operational dashboards for scaling  
+                Recommended enterprise actions:
+
+                • Deploy automated reporting systems  
+                • Integrate finance and CRM analytics  
+                • Use AI-driven operational monitoring  
+                • Improve HR workflow automation  
+                • Enable project escalation alerts  
                 """
             ]
 
@@ -396,7 +366,7 @@ with left:
     st.markdown("</div>", unsafe_allow_html=True)
 
     # =====================================================
-    # HR AUTOMATION
+    # HR SECTION
     # =====================================================
 
     st.markdown("""
@@ -407,20 +377,20 @@ with left:
         </div>
 
         <span class="tag">Resume Screening</span>
-        <span class="tag">AI Skill Matching</span>
         <span class="tag">Candidate Ranking</span>
         <span class="tag">Interview Scheduling</span>
+        <span class="tag">Skill Matching</span>
 
         <div class="success-box">
         AI screened 142 resumes this week.
         </div>
 
         <div class="warning-box">
-        8 high-potential candidates detected.
+        8 high-potential candidates identified.
         </div>
 
         <div class="danger-box">
-        Engineering hiring pipeline requires attention.
+        Engineering hiring pipeline needs attention.
         </div>
 
     </div>
@@ -438,11 +408,11 @@ with left:
         </div>
 
         <ul>
-            <li>Lead scoring automation active</li>
-            <li>AI customer churn prediction enabled</li>
+            <li>Lead scoring automation enabled</li>
+            <li>Customer churn prediction active</li>
+            <li>AI-generated follow-up reminders</li>
             <li>Sales engagement tracking improved</li>
-            <li>Automated follow-up reminders generated</li>
-            <li>Customer segmentation insights available</li>
+            <li>Customer segmentation analytics available</li>
         </ul>
 
     </div>
@@ -466,7 +436,7 @@ with right:
         </div>
 
         <div class="success-box">
-        Budget optimization opportunities identified.
+        Budget optimization opportunities detected.
         </div>
 
         <div class="warning-box">
@@ -474,7 +444,7 @@ with right:
         </div>
 
         <div class="danger-box">
-        Unusual expense spike detected in Operations.
+        Unusual expense spike detected.
         </div>
 
     </div>
@@ -492,18 +462,17 @@ with right:
         </div>
 
         <ul>
-            <li>Warehouse efficiency improved by 24%</li>
             <li>Supply chain bottleneck detection active</li>
-            <li>Delivery forecasting enabled</li>
-            <li>Operational risk alerts generated</li>
-            <li>AI process optimization running</li>
+            <li>Warehouse efficiency improved by 24%</li>
+            <li>Operational forecasting enabled</li>
+            <li>Delivery optimization AI running</li>
         </ul>
 
     </div>
     """, unsafe_allow_html=True)
 
     # =====================================================
-    # PROJECT MANAGEMENT
+    # PROJECTS
     # =====================================================
 
     st.markdown("""
@@ -514,10 +483,10 @@ with right:
         </div>
 
         <ul>
-            <li>4 project deadlines approaching</li>
-            <li>AI resource allocation active</li>
-            <li>Task priority optimization enabled</li>
-            <li>Cross-team workload balancing improved</li>
+            <li>4 deadlines approaching this week</li>
+            <li>AI task prioritization enabled</li>
+            <li>Resource allocation optimized</li>
+            <li>Cross-team collaboration improved</li>
         </ul>
 
     </div>
@@ -536,8 +505,8 @@ with right:
     """, unsafe_allow_html=True)
 
     chart_data = pd.DataFrame({
-        "Month": ["Jan","Feb","Mar","Apr","May","Jun"],
-        "Revenue": [20,35,48,60,72,91]
+        "Month": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        "Revenue": [20, 35, 48, 60, 72, 91]
     })
 
     st.line_chart(
